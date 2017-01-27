@@ -407,7 +407,7 @@ module ArJdbc
       columns = execute(sql, name || 'SCHEMA')
       strict = strict_mode?
       pass_cast_type = respond_to?(:lookup_cast_type)
-      columns.map! do |field|
+      columns.to_a.map! do |field|
         sql_type = field['Type']
         null = field['Null'] == "YES"
         if pass_cast_type
@@ -417,7 +417,6 @@ module ArJdbc
           Column.new(field['Field'], field['Default'], sql_type, null, field['Collation'], strict, field['Extra'])
         end
       end
-      columns
     end
 
     if defined? ::ActiveRecord::ConnectionAdapters::AbstractAdapter::SchemaCreation
